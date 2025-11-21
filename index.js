@@ -10,7 +10,7 @@ const { getState } = require("@saltcorn/data/db/state");
 const authentication = (config) => {
   const scLogLevel = getState().logLevel;
   const bLogLevel =
-    scLogLevel === 5
+    scLogLevel >= 5
       ? bunyan.TRACE
       : scLogLevel === 4
       ? bunyan.DEBUG
