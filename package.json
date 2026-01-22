@@ -1,6 +1,6 @@
 {
   "name": "@saltcorn/ldap-auth",
-  "version": "0.1.6",
+  "version": "0.1.7",
   "description": "Authentication with LDAP",
   "main": "index.js",
   "dependencies": {
