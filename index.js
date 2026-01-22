@@ -13,8 +13,8 @@ const authentication = (config) => {
     scLogLevel >= 5
       ? bunyan.TRACE
       : scLogLevel === 4
-      ? bunyan.DEBUG
-      : bunyan.ERROR;
+        ? bunyan.DEBUG
+        : bunyan.ERROR;
   var logger = bunyan.createLogger({
     name: "saltcorn-ldap",
     level: bLogLevel,
@@ -25,6 +25,7 @@ const authentication = (config) => {
       setsUserAttribute: "ldapdn",
       postUsernamePassword: true,
       usernameLabel: "UID",
+      shareWithTenants: config?.share_on_subdomains,
       strategy: new LdapStrategy(
         {
           server: { ...config, log: logger },
@@ -37,7 +38,7 @@ const authentication = (config) => {
           }).then((u) => {
             return cb(null, u.session_object);
           });
-        }
+        },
       ),
     },
   };
@@ -78,6 +79,16 @@ const configuration_workflow = () => {
                 type: "String",
                 required: true,
               },
+              ...[
+                {
+                  name: "share_on_subdomains",
+                  label: "Share on subdomains",
+                  type: "Bool",
+                  sublabel:
+                    "Share this login option with all subdomains of the current tenant",
+                  default: false,
+                },
+              ].filter((f) => db.connectObj?.multi_tenant),
             ],
           }),
       },
