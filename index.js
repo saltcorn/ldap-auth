@@ -34,7 +34,7 @@ const authentication = (config) => {
         },
         function (user, cb) {
           User.findOrCreateByAttribute("ldapdn", user.dn, {
-            email: user.mail || "",
+            email: user[config.emailField || "mail"] || "",
           }).then((u) => {
             return cb(null, u.session_object);
           });
@@ -78,6 +78,13 @@ const configuration_workflow = () => {
                 label: "Search Filter",
                 type: "String",
                 required: true,
+              },
+              {
+                name: "emailField",
+                label: "Email field",
+                type: "String",
+                sublabel:
+                  "Optional. Defaults to 'mail'. Enter a different LDAP field here to use as the email address",
               },
               ...[
                 {
